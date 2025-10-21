@@ -2,15 +2,22 @@
 
 import { useGoogleLogin } from "@react-oauth/google";
 import toast from "react-hot-toast";
-import { API_LOGIN_URL } from "../../../config";
+import {
+  API_LOGIN_URL,
+  LOCAL_STORAGE_KEYS,
+  TOAST_MESSAGES,
+} from "../../../config";
 import { useRouter } from "next/navigation";
 import MobileStepper from "@mui/material/MobileStepper";
 import { useEffect, useState } from "react";
+import { useUser } from "@/stores/user.store";
 
-const STEPS = 6;
+const LOADER_STEPS_COUNT = 6;
 
 export default function Login() {
   const router = useRouter();
+  const setUserData = useUser((state) => state.setUserData);
+
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
 
@@ -18,7 +25,7 @@ export default function Login() {
     let interval: any = null;
     if (isLoginInProgress) {
       interval = setInterval(() => {
-        setActiveStep((prev) => (prev + 1) % STEPS);
+        setActiveStep((prev) => (prev + 1) % LOADER_STEPS_COUNT);
       }, 100);
     }
     return () => clearInterval(interval);
@@ -39,22 +46,34 @@ export default function Login() {
         const resBody = await res.json();
 
         if (res.status === 200) {
-          const { token } = resBody;
-          localStorage.setItem("token", token);
+          const { token, user_data: userData } = resBody;
+          localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, token);
+          localStorage.setItem(
+            LOCAL_STORAGE_KEYS.USER_DATA,
+            JSON.stringify(userData)
+          );
+          setUserData(userData);
+
           router.push("/");
         } else {
-          toast.error(resBody.message);
+          toast.error(resBody.message, {
+            position: "top-center",
+          });
         }
       } catch (error) {
         console.error(error);
-        toast.error("Login failed. Please try again.");
+        toast.error(TOAST_MESSAGES.LOGIN_FAILED, {
+          position: "top-center",
+        });
       } finally {
         setIsLoginInProgress(false);
       }
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Login failed. Please try again.");
+      toast.error(TOAST_MESSAGES.LOGIN_FAILED, {
+        position: "top-center",
+      });
       setIsLoginInProgress(false);
     },
   });
@@ -78,7 +97,7 @@ export default function Login() {
         >
           {isLoginInProgress ? (
             <MobileStepper
-              steps={STEPS}
+              steps={LOADER_STEPS_COUNT}
               backButton={<></>}
               nextButton={<></>}
               variant="dots"
