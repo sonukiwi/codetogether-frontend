@@ -8,7 +8,7 @@ interface User {
 
 interface UserStore {
   user: User;
-  setUserData: (user: User) => void;
+  setUser: (user: User) => void;
 }
 
 export const useUser = create<UserStore>((set) => ({
@@ -17,5 +17,5 @@ export const useUser = create<UserStore>((set) => ({
     name: "",
     picture: "",
   },
-  setUserData: (user: User) => set({ user }),
+  setUser: (user: User) => set({ user }),
 }));

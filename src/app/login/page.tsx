@@ -11,12 +11,14 @@ import { useRouter } from "next/navigation";
 import MobileStepper from "@mui/material/MobileStepper";
 import { useEffect, useState } from "react";
 import { useUser } from "@/stores/user.store";
+import { useAuth } from "@/stores/auth.store";
 
 const LOADER_STEPS_COUNT = 6;
 
 export default function Login() {
   const router = useRouter();
-  const setUserData = useUser((state) => state.setUserData);
+  const setUser = useUser((state) => state.setUser);
+  const setToken = useAuth((state) => state.setToken);
 
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
@@ -52,7 +54,8 @@ export default function Login() {
             LOCAL_STORAGE_KEYS.USER_DATA,
             JSON.stringify(userData)
           );
-          setUserData(userData);
+          setToken(token);
+          setUser(userData);
 
           router.push("/");
         } else {

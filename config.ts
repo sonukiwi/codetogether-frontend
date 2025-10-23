@@ -1,5 +1,6 @@
 export const API_BASE_URL = "http://localhost:5000";
 export const API_LOGIN_URL = `${API_BASE_URL}/login`;
+export const API_TO_CHECK_TOKEN_VALIDITY = `${API_BASE_URL}/is-token-valid`;
 
 export const LOCAL_STORAGE_KEYS = {
   TOKEN: "token",
@@ -10,6 +11,7 @@ export const TOAST_MESSAGES = {
   LOGIN_FAILED: "Login failed. Please try again.",
   LOGOUT_SUCCESS: "Successfully logged out.",
   LOGIN_REQUIRED: "Please login to access app.",
+  INVALID_SESSION: "Invalid session. Please login again.",
 };
 
 export const APP_ROUTES = {
