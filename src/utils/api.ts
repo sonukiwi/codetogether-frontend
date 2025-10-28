@@ -21,8 +21,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
-      location.href = `${APP_ROUTES.LOGIN}?tokenExpired=true`;
+      localStorage.clear();
+      location.href = `${APP_ROUTES.LOGIN}?unauthorized=true`;
     }
     return Promise.reject(error);
   }

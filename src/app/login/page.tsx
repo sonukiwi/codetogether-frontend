@@ -7,7 +7,7 @@ import {
   LOCAL_STORAGE_KEYS,
   TOAST_MESSAGES,
 } from "../../../config";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import MobileStepper from "@mui/material/MobileStepper";
 import { useEffect, useState } from "react";
 import { useUser } from "@/stores/user.store";
@@ -23,6 +23,8 @@ export default function Login() {
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
 
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     let interval: any = null;
     if (isLoginInProgress) {
@@ -32,6 +34,18 @@ export default function Login() {
     }
     return () => clearInterval(interval);
   }, [isLoginInProgress]);
+
+  useEffect(() => {
+    const unauth = searchParams.get("unauthorized");
+    if (unauth) {
+      toast.error(TOAST_MESSAGES.INVALID_SESSION, {
+        position: "top-center",
+      });
+
+      const newUrl = location.pathname;
+      router.replace(newUrl);
+    }
+  }, [searchParams]);
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (response) => {
