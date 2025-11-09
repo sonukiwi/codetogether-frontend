@@ -12,6 +12,7 @@ import MobileStepper from "@mui/material/MobileStepper";
 import { useEffect, useState } from "react";
 import { useUser } from "@/stores/user.store";
 import { useAuth } from "@/stores/auth.store";
+import { show_toast } from "@/utils/toast";
 
 const LOADER_STEPS_COUNT = 6;
 
@@ -38,9 +39,7 @@ export default function Login() {
   useEffect(() => {
     const unauth = searchParams.get("unauthorized");
     if (unauth) {
-      toast.error(TOAST_MESSAGES.INVALID_SESSION, {
-        position: "top-center",
-      });
+      show_toast(TOAST_MESSAGES.INVALID_SESSION, "error");
 
       const newUrl = location.pathname;
       router.replace(newUrl);
@@ -73,24 +72,18 @@ export default function Login() {
 
           router.push("/");
         } else {
-          toast.error(resBody.message, {
-            position: "top-center",
-          });
+          show_toast(resBody.message, "error");
         }
       } catch (error) {
         console.error(error);
-        toast.error(TOAST_MESSAGES.LOGIN_FAILED, {
-          position: "top-center",
-        });
+        show_toast(TOAST_MESSAGES.LOGIN_FAILED, "error");
       } finally {
         setIsLoginInProgress(false);
       }
     },
     onError: (error) => {
       console.error(error);
-      toast.error(TOAST_MESSAGES.LOGIN_FAILED, {
-        position: "top-center",
-      });
+      show_toast(TOAST_MESSAGES.LOGIN_FAILED, "error");
       setIsLoginInProgress(false);
     },
   });

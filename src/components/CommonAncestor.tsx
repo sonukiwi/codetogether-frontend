@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "@/stores/auth.store";
 import api from "@/utils/api";
 import CircularProgress from "@mui/material/CircularProgress";
+import { show_toast } from "@/utils/toast";
 
 export default function CommonAncestor({
   children,
@@ -66,9 +67,7 @@ export default function CommonAncestor({
 
         if (!isTokenValid) {
           router.push(APP_ROUTES.LOGIN);
-          toast.error(TOAST_MESSAGES.INVALID_SESSION, {
-            position: "top-center",
-          });
+          show_toast(TOAST_MESSAGES.INVALID_SESSION, "error");
           localStorage.clear();
         }
       } catch (error) {

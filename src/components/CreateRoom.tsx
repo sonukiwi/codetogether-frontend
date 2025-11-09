@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { API_CREATE_ROOM, TOAST_MESSAGES } from "../../config";
 import toast from "react-hot-toast";
 import ShowRoomIdModal from "./modals/ShowRoomId";
+import { show_toast } from "@/utils/toast";
 
 export default function CreateRoom() {
   const [roomName, setRoomName] = useState<string>("");
@@ -42,9 +43,7 @@ export default function CreateRoom() {
       }
     } catch (err) {
       console.log("Following error while creating room : ", err);
-      toast.error(TOAST_MESSAGES.CREATE_ROOM_FAILED, {
-        position: "top-center",
-      });
+      show_toast(TOAST_MESSAGES.CREATE_ROOM_FAILED, "error");
     } finally {
       setIsCreatingRoom(false);
 
@@ -107,7 +106,7 @@ export default function CreateRoom() {
 
           <button
             type="button"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg mt-4 hover:cursor-pointer active:scale-101 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg mt-4 hover:cursor-pointer active:scale-101 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
             onClick={create_room}
             disabled={!isFormSubmitButtonEnabled || isCreatingRoom}
           >
