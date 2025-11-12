@@ -98,7 +98,7 @@ export default function CreateRoom() {
               <ToggleButton value="PUBLIC" className="grow-1">
                 Public
               </ToggleButton>
-              <ToggleButton value="PRIVATE" className="grow-1">
+              <ToggleButton value="PRIVATE" className="grow-1" disabled={true}>
                 Private
               </ToggleButton>
             </ToggleButtonGroup>
